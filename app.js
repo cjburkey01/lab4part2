@@ -163,21 +163,68 @@ function fetchComments($id) {
 }
 
 function setComment($id) {
+    // Validate comment
+    let comment = $.trim($("#message-text").val());
+    if (!comment || comment == '') {
+        alert('Please enter a comment');
+        return;
+    }
+    let score = parseInt($.trim($("#score").val()));
+    if (!score) {
+        alert('Please select a score');
+        return;
+    }
 
-    //TODO complete implementation using the product id
-    alert("app.js/setComment() not implemented")
+    //jQuery Ajax request
+    $.ajax({
+        url: Url+`SetComment`, //API url
+        type: 'post',
+        dataType: 'json', //dataType, which is json for this lab.
+        data: JSON.stringify({"product_id": $id, "comment": comment, "score": score}), //the json is defined here using javascript's dictionary syntax.
+        contentType: 'text/json',
+        success: function (data) {
+            alert('Comment added!')
+        },
+        error: function (data) {
+            console.error(data);
+            alert("Error while adding comment");
+        }
+    });
+}
 
-    //HINT
-    //Take note of how the Ajax call in app.js/fetchComments() posts a GET request to corresponding API endpoint.
-    //Look at the Microservice API Documentation and find out the appripriate type of request for this action.
-
+function getEmail() {
+    let email = sessionStorage.getItem('email');
+    if (!email || email == '') {
+        email = $.trim($('#email').val());
+        if (!email || email == '') {
+            alert("Please enter your email at top of page."); //alert user since email is empty
+            return null;
+        } else {
+            sessionStorage.setItem('email', email);
+        }
+    }
+    return email;
 }
 
 function addToCart($id) {
+    let email = getEmail();
+    if (!email) return;
 
-    //TODO complete implementation using the product id
-    alert("app.js/addToCart() not implemented")
-
+    //jQuery Ajax request
+    $.ajax({
+        url: Url+'AddToCart', //API url
+        type: 'post',
+        dataType: 'json', //dataType, which is json for this lab.
+        data: JSON.stringify({"product_id":$id, "email": email}), //the json is defined here using javascript's dictionary syntax.
+        contentType: 'text/json',
+        success: function (data) {
+            alert("Added item to cart");
+        },
+        error: function (data) {
+            console.error(data);
+            alert("Error while adding item to cart.");
+        }
+    });
 
 }
 

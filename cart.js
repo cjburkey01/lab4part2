@@ -50,14 +50,37 @@ function getCart($email) {
 }
 
 function deleteItem($id) {
-
-    //TODO complete implementation using the product id
-    alert("cart.js/deleteItem() is not implemented")
+    //jQuery Ajax request
+    $.ajax({
+        url: Url+`Cart/${$id}`, //API url
+        type: 'delete',
+        dataType: 'json', //dataType, which is json for this lab.
+        data: JSON.stringify(), //the json is defined here using javascript's dictionary syntax.
+        contentType: 'text/json',
+        success: function (data) {
+            getCart(email);
+        },
+        error: function (data) {
+            console.error(data);
+            alert("Error while removing item from cart.");
+        }
+    });
 }
 
 function checkOut() {
-
-    //TODO complete implementation
-    alert("cart.js/checkOut() is not implemented")
-
+    //jQuery Ajax request
+    $.ajax({
+        url: Url+`Cart`, //API url
+        type: 'put',
+        dataType: 'json', //dataType, which is json for this lab.
+        data: JSON.stringify({"email": email}), //the json is defined here using javascript's dictionary syntax.
+        contentType: 'text/json',
+        success: function (data) {
+            alert('Order placed!');
+        },
+        error: function (data) {
+            console.error(data);
+            alert("Error while checking out.");
+        }
+    });
 }
